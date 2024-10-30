@@ -1,0 +1,10 @@
+.md-editor {
+    .bytemd-fullscreen {
+        z-index: 9999; /* 确保编辑器位于最顶层 */
+    }
+
+    .bytemd-toolbar-icon.bytemd-tippy.bytemd-tippy-right:last-child {
+        display: none;
+    }
+}
+

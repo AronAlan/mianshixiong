@@ -1,0 +1,28 @@
+# 线上配置文件
+# @author Samoyer
+server:
+  port: 8101
+spring:
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://122.51.254.210:3306/mianshixiong
+    username: msx_user
+    password: mianshixiongsql@
+  # Redis 配置
+  redis:
+    database: 0
+    host: 122.51.254.210
+    port: 6379
+    timeout: 5000
+    password: mianshixiongredis@
+mybatis-plus:
+  configuration:
+    # 生产环境关闭日志
+    log-impl: ''
+# 接口文档配置
+knife4j:
+  basic:
+    enable: true
+    username: root
+    password: 123456

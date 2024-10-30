@@ -1,0 +1,16 @@
+package com.samoyer.mianshixiong.esdao;
+
+import com.samoyer.mianshixiong.model.dto.post.PostEsDTO;
+import java.util.List;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+
+/**
+ * 帖子 ES 操作
+ *
+ * @author Samoyer
+ * 
+ */
+public interface PostEsDao extends ElasticsearchRepository<PostEsDTO, Long> {
+
+    List<PostEsDTO> findByUserId(Long userId);
+}

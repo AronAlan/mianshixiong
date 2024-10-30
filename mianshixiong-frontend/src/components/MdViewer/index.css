@@ -1,0 +1,8 @@
+.md-viewer {
+    .bytemd-toolbar-icon.bytemd-tippy.bytemd-tippy-right:last-child {
+        display: none;
+    }
+    .md-editor-fullscreen {
+        z-index: 9999; /* 设置一个较大的 z-index 值 */
+    }
+}
