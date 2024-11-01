@@ -1,23 +1,22 @@
 "use client";
-import {GithubFilled, LogoutOutlined, UserOutlined} from "@ant-design/icons";
-import {ProLayout} from "@ant-design/pro-components";
-import {Button, Dropdown, message} from "antd";
-import React, {useState} from "react";
-import Image from "next/image";
-import {usePathname, useRouter} from "next/navigation";
-import Link from "next/link";
-import GlobalFooter from "@/components/GlobalFooter";
-import {menus} from "../../../config/menu";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "@/stores";
 import getAccessibleMenus from "@/access/menuAccess";
-import {addUserSignInUsingPost, userLogoutUsingPost} from "@/api/userController";
-import {setLoginUser} from "@/stores/loginUser";
-import {DEFAULT_USER} from "@/constants/user";
+import { addUserSignInUsingPost, userLogoutUsingPost } from "@/api/userController";
+import GlobalFooter from "@/components/GlobalFooter";
+import { DEFAULT_USER } from "@/constants/user";
 import SearchInput from "@/layouts/BasicLayout/components/SearchInput";
+import { AppDispatch, RootState } from "@/stores";
+import { setLoginUser } from "@/stores/loginUser";
+import { GithubFilled, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { ProLayout } from "@ant-design/pro-components";
+import { Button, Dropdown, message } from "antd";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { menus } from "../../../config/menu";
+import FloatButtons from "./components/FloatButtons";
 import "./index.css";
-import MdEditor from "@/components/MdEditor";
-import MdViewer from "@/components/MdViewer";
 
 interface Props {
     children: React.ReactNode;
@@ -44,7 +43,7 @@ export default function BasicLayout({children}: Props) {
             message.success("已退出登录");
             dispatch(setLoginUser(DEFAULT_USER));
             router.push("/user/login");
-        } catch (e) {
+        } catch (e: any) {
             message.error("操作失败，" + e.message);
         }
     };

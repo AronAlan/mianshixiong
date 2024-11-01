@@ -14,6 +14,7 @@ import com.samoyer.mianshixiong.model.dto.question.QuestionEsDTO;
 import com.samoyer.mianshixiong.model.dto.question.QuestionQueryRequest;
 import com.samoyer.mianshixiong.model.entity.*;
 import com.samoyer.mianshixiong.model.vo.QuestionVO;
+import com.samoyer.mianshixiong.model.vo.RecommendQuestionVo;
 import com.samoyer.mianshixiong.model.vo.UserVO;
 import com.samoyer.mianshixiong.service.*;
 import com.samoyer.mianshixiong.utils.SqlUtils;
@@ -25,6 +26,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -65,6 +67,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Resource
     private QuestionIsLikeCollectService questionIsLikeCollectService;
+
+    @Resource
+    private QuestionMapper questionMapper;
 
     /**
      * 校验数据
@@ -182,9 +187,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             questionIsLikeCollect.setUserId(loginUserId);
             questionIsLikeCollect.setQuestionId(question.getId());
             questionIsLikeCollectService.save(questionIsLikeCollect);
-        }else{
-            isLike=questionIsLikeCollect.getIsLike();
-            isFavour=questionIsLikeCollect.getIsFavour();
+        } else {
+            isLike = questionIsLikeCollect.getIsLike();
+            isFavour = questionIsLikeCollect.getIsFavour();
         }
         questionVO.setIsLike(isLike);
         questionVO.setIsFavour(isFavour);
@@ -369,6 +374,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         }
         //批量删除questionIdList的点赞收藏数据
         questionLikeCollectService.removeBatchByIds(questionIdList);
+    }
+
+    /**
+     * 获取所有未删除的ids
+     */
+    @Override
+    public List<RecommendQuestionVo> getRecommendQuestionVos() {
+        return questionMapper.getRecommendQuestionVos();
     }
 
 }

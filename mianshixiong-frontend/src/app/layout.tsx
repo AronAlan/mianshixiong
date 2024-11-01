@@ -8,6 +8,7 @@ import { getLoginUserUsingGet } from "@/api/userController";
 import AccessLayout from "@/access/AccessLayout";
 import { setLoginUser } from "@/stores/loginUser";
 import "./globals.css";
+import FloatButtons from "@/layouts/BasicLayout/components/FloatButtons";
 
 /**
  * 全局初始化逻辑
@@ -61,6 +62,7 @@ export default function RootLayout({
               <BasicLayout>
                 <AccessLayout>{children}</AccessLayout>
               </BasicLayout>
+              <FloatButtons />
             </InitLayout>
           </Provider>
         </AntdRegistry>

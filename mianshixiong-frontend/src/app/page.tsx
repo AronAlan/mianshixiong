@@ -1,12 +1,13 @@
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
-import { listQuestionVoByPageUsingPost } from "@/api/questionController";
+import { getRecommendQuestionVoByIdUsingGet, listQuestionVoByPageUsingPost } from "@/api/questionController";
+// import { listRecommendQuestionVoUsingGet } from "@/api/questionController";
+import QuestionBankList from "@/components/QuestionBankList";
+import QuestionList from "@/components/QuestionList";
 import { Card, Divider, Flex } from "antd";
 import Title from "antd/es/typography/Title";
 import Link from "next/link";
 import "./index.css";
-import QuestionBankList from "@/components/QuestionBankList";
-import QuestionList from "@/components/QuestionList";
-import MdEditor from "@/components/MdEditor";
+import RecommendQuestionList from "@/components/RecommendQuestionList";
 
 // 本页面使用服务端渲染，禁用静态生成
 export const dynamic = "force-dynamic";
@@ -18,6 +19,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
     let questionBankList = [];
     let questionList = [];
+    let recommendList = [];
 
     try {
         const questionBankRes = (await listQuestionBankVoByPageUsingPost({
@@ -40,6 +42,14 @@ export default async function HomePage() {
     } catch (e: any) {
         console.error("获取题目列表失败，" + e.message);
     }
+
+    try {
+        const recommendRes = (await getRecommendQuestionVoByIdUsingGet()) as any;
+        recommendList = recommendRes.data ?? [];
+    } catch (e: any) {
+        console.error("获取推荐列表失败，" + e.message);
+    }
+
     return (
         <div id="homePage" className="max-width-content">
             <Card
@@ -87,7 +97,7 @@ export default async function HomePage() {
                             lineHeight: "40px",
                             marginTop: 30,
                             textAlign: "center",
-                            fontFamily: "ZoomlaWenzhengming-A064" // 使用自定义字体
+                            fontFamily: "ZoomlaWenzhengming-A064"
                         }}
                     >
                         雄关漫道真如铁，而今迈步从头越
@@ -118,17 +128,56 @@ export default async function HomePage() {
 
             <Flex justify="space-between" align="center">
                 <Title level={3}>最新题库</Title>
-                <Link href={"/banks"}>查看更多</Link>
             </Flex>
             <QuestionBankList questionBankList={questionBankList} />
+            <div style={{ textAlign: 'center', margin: '5px 0' }}>
+                <Link href="/banks">
+                    <button className="view-more-btn">
+                        查看更多题库
+                    </button>
+                </Link>
+            </div>
 
             <Divider />
 
-            <Flex justify="space-between" align="center">
-                <Title level={3}>最新题目</Title>
-                <Link href={"/questions"}>查看更多</Link>
+            {/* 修改这部分，添加 Flex 容器包裹最新题目和推荐栏 */}
+            <Title level={3}>最新题目</Title>
+            
+            {/* 修改这部分，将 Flex 容器移到标题下方 */}
+            <Flex justify="space-between" align="flex-start" gap={20}>
+                {/* 左侧最新题目列表 */}
+                <div style={{ flex: 2 }}>
+                    <QuestionList questionList={questionList} />
+                    <div style={{ textAlign: 'center', margin: '5px 0' }}>
+                        <Link href="/questions">
+                            <button className="view-more-btn">
+                                查看更多题目
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+
+                {/* 右侧推荐栏 */}
+                <div style={{ flex: 1 }}>
+                    <Card
+                        title={<Title level={4} style={{ marginBottom: 0 }}>为您推荐</Title>}
+                        style={{ 
+                            borderRadius: 8,
+                            backgroundColor: '#eff6e6'
+                        }}
+                        headStyle={{
+                            backgroundColor: '#dfeecd',
+                            padding: '8px 16px'  // 减小标题区域的内边距
+                        }}
+                        bodyStyle={{
+                            paddingTop: '8px',  // 减小内容区域的上内边距
+                            paddingBottom: '8px'  // 减小底部内边距
+                        }}
+                    >
+                        <RecommendQuestionList questionList={recommendList} />
+                    </Card>
+                </div>
             </Flex>
-            <QuestionList questionList={questionList} />
         </div>
     );
 }

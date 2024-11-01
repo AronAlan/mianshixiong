@@ -2,6 +2,7 @@ package com.samoyer.mianshixiong.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.csp.sentinel.Entry;
 import com.alibaba.csp.sentinel.EntryType;
@@ -25,6 +26,7 @@ import com.samoyer.mianshixiong.model.entity.Question;
 import com.samoyer.mianshixiong.model.entity.QuestionLikeCollect;
 import com.samoyer.mianshixiong.model.entity.User;
 import com.samoyer.mianshixiong.model.vo.QuestionVO;
+import com.samoyer.mianshixiong.model.vo.RecommendQuestionVo;
 import com.samoyer.mianshixiong.sentinel.SentinelConstant;
 import com.samoyer.mianshixiong.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -367,7 +371,6 @@ public class QuestionController {
         return ResultUtils.success(true);
     }
 
-    // endregion
 
     @PostMapping("/search/page/vo")
     public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -457,5 +460,24 @@ public class QuestionController {
         //对question_like_collect表的收藏量减1
         questionLikeCollectService.reduceFavourCount(questionId);
         return ResultUtils.success(true);
+    }
+
+    /**
+     * 获取推荐题目
+     *
+     * @return
+     */
+    @GetMapping("/get/recommend")
+    public BaseResponse<List<RecommendQuestionVo>> getRecommendQuestionVoById(HttpServletRequest request) {
+        // 方案1：TODO 改为：将题目表中所有题目的id都存到redis中，从redis中取
+        // 方案2：TODO 将当前用户的刷题记录和对应的标签 记录到redis中。根据当前用户浏览记录，按照题目所属标签的热度（次数）排序，从此标签中获取响应的题目推荐
+        // 方案3：TODO 按照总题目热度排序，每个题目被阅读时，redis中浏览量加1，推荐热度前十的题目
+
+        //获取题目表中所有的ids
+        List<RecommendQuestionVo> recommendQuestionVoList=questionService.getRecommendQuestionVos();
+        //咱使用随机取的办法，随机取10个
+        int sampleSize = Math.min(10, recommendQuestionVoList.size());
+        Collections.shuffle(recommendQuestionVoList);
+        return ResultUtils.success(recommendQuestionVoList.subList(0, sampleSize));
     }
 }

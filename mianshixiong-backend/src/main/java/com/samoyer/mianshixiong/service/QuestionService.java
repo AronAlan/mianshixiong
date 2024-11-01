@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.samoyer.mianshixiong.model.dto.question.QuestionQueryRequest;
 import com.samoyer.mianshixiong.model.entity.Question;
 import com.samoyer.mianshixiong.model.vo.QuestionVO;
+import com.samoyer.mianshixiong.model.vo.RecommendQuestionVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -75,4 +76,9 @@ public interface QuestionService extends IService<Question> {
      */
 
     void batchDeleteQuestions(List<Long> questionIdList);
+
+    /**
+     * 获取未删除的所有ids
+     */
+    List<RecommendQuestionVo> getRecommendQuestionVos();
 }

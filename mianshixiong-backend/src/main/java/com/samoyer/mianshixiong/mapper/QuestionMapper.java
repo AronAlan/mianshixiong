@@ -2,6 +2,7 @@ package com.samoyer.mianshixiong.mapper;
 
 import com.samoyer.mianshixiong.model.entity.Question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.samoyer.mianshixiong.model.vo.RecommendQuestionVo;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
@@ -19,4 +20,10 @@ public interface QuestionMapper extends BaseMapper<Question> {
     @Select("select * from question where updateTime >= #{minUpdateTime}")
     List<Question> listQuestionWithDelete(Date minUpdateTime);
 
+    /**
+     * 获取所有未被删除的题目ids
+     * @return
+     */
+    @Select("select id,title from question where isDelete=0")
+    List<RecommendQuestionVo> getRecommendQuestionVos();
 }

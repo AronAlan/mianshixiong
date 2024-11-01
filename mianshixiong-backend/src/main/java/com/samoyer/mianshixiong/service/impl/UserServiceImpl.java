@@ -313,8 +313,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int offset = date.getDayOfYear();
         // 查询当天有没有签到
         if (!signInBitSet.get(offset)) {
-            // 如果当前未签到，则设置
-            signInBitSet.set(offset, true);
+            // 如果当前未签到，则设置（返回给前端的是false）
+            return signInBitSet.set(offset, true);
         }
         // 当天已签到
         return true;
