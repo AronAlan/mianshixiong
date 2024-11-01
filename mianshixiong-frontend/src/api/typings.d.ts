@@ -27,6 +27,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListRecommendQuestionVo_ = {
+    code?: number;
+    data?: RecommendQuestionVo[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO_ = {
     code?: number;
     data?: LoginUserVO;
@@ -659,6 +665,11 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+  };
+
+  type RecommendQuestionVo = {
+    id?: number;
+    title?: string;
   };
 
   type uploadFileUsingPOSTParams = {
